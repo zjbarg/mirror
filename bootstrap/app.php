@@ -17,6 +17,18 @@ $app = new Illuminate\Foundation\Application(
 
 /*
 |--------------------------------------------------------------------------
+| Set the application directory
+|--------------------------------------------------------------------------
+|
+| By default, the app path is 'app', which is where all of the application
+| code lives. Since we are using a custom directory structure, we shall
+| tell the application instance where to find the application code.
+*/
+
+$app->useAppPath(__DIR__.'/../src/Mirror');
+
+/*
+|--------------------------------------------------------------------------
 | Bind Important Interfaces
 |--------------------------------------------------------------------------
 |
@@ -28,17 +40,17 @@ $app = new Illuminate\Foundation\Application(
 
 $app->singleton(
     Illuminate\Contracts\Http\Kernel::class,
-    App\Http\Kernel::class
+    Mirror\Web\Kernel::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
-    App\Console\Kernel::class
+    Mirror\Console\Kernel::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
-    App\Exceptions\Handler::class
+    Mirror\ExceptionsHandler::class
 );
 
 /*
