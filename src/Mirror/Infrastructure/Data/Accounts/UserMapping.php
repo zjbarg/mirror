@@ -22,5 +22,7 @@ class UserMapping extends EntityMapping
         $builder->string('password');
         $builder->rememberToken('remember_token')->nullable();
         $builder->timestamps('created_at', 'updated_at', 'carbondatetime');
+
+        $builder->entity()->setRepositoryClass(DoctrineUsersRepository::class);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Mirror\Web\EndPoints\Auth\PasswordReset;
+namespace Mirror\Web\EndPoints\Auth\ConfirmPassword;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +29,7 @@ class ConfirmablePasswordController extends Controller
     public function store(Request $request)
     {
         if (! Auth::guard('web')->validate([
-            'email' => $request->user()->email,
+            'email' => $request->user()->getEmailAddress(),
             'password' => $request->password,
         ])) {
             throw ValidationException::withMessages([

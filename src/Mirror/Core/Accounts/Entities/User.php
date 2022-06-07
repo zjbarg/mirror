@@ -6,11 +6,10 @@ use Carbon\Carbon;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\CanResetPassword;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Mirror\Core\Accounts\Events\PasswordReset;
-use Mirror\Core\Accounts\Events\Registered;
+use LaravelDoctrine\ORM\Notifications\Notifiable;
+use Mirror\Core\Accounts\RegisteredEvent;
 use Mirror\Core\BaseEntity;
 
 class User extends BaseEntity implements Authenticatable, CanResetPassword
@@ -24,6 +23,22 @@ class User extends BaseEntity implements Authenticatable, CanResetPassword
     private string|null $remember_token = null;
     private Carbon $created_at;
     private Carbon $updated_at;
+
+    public function __construct(
+        string $name,
+        string $email,
+        string $password,
+    )
+    {
+        $this->name = $name;
+        $this->email = $email;
+        $this->password = Hash::make($password);
+    }
+
+    public function getKey(): int
+    {
+        return $this->id;
+    }
 
     public function getAuthIdentifierName(): string
     {
@@ -67,12 +82,9 @@ class User extends BaseEntity implements Authenticatable, CanResetPassword
 
     public static function register(string $name, string $email, string $password): self
     {
-        $user = new self;
-        $user->name = $name;
-        $user->email = $email;
-        $user->password = Hash::make($password);
+        $user = new self($name, $email, $password);
 
-        $user->raise(new Registered($user));
+        $user->raise(new RegisteredEvent($user));
 
         return $user;
     }
@@ -81,8 +93,6 @@ class User extends BaseEntity implements Authenticatable, CanResetPassword
     {
         $this->password = Hash::make($password);
         $this->remember_token = Str::random(60);
-
-        $this->raise(new PasswordReset($this));
     }
 
     public function getEmailAddress(): string

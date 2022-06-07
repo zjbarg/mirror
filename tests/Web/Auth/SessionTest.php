@@ -1,15 +1,17 @@
 <?php
 
-namespace Tests\Feature\Auth;
+namespace Tests\Web\Auth;
 
-use App\Models\User;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Mirror\Core\Accounts\Entities\User;
+use Mirror\Web\Providers\RouteServiceProvider;
+use Tests\Web\WebTestCase;
 
-class AuthenticationTest extends TestCase
+class SessionTest extends WebTestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     public function test_login_screen_can_be_rendered()
     {
@@ -20,10 +22,11 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_authenticate_using_the_login_screen()
     {
-        $user = User::factory()->create();
+        /** @var User */
+        $user = entity(User::class)->create();
 
         $response = $this->post('/login', [
-            'email' => $user->email,
+            'email' => $user->getEmailAddress(),
             'password' => 'password',
         ]);
 
@@ -33,10 +36,11 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_not_authenticate_with_invalid_password()
     {
-        $user = User::factory()->create();
+        /** @var User */
+        $user = entity(User::class)->create();
 
         $this->post('/login', [
-            'email' => $user->email,
+            'email' => $user->getEmailAddress(),
             'password' => 'wrong-password',
         ]);
 

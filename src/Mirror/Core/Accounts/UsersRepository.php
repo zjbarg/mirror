@@ -1,6 +1,6 @@
 <?php
 
-namespace Mirror\Core\Accounts\Contracts;
+namespace Mirror\Core\Accounts;
 
 use Mirror\Core\Accounts\Entities\User;
 
@@ -8,5 +8,5 @@ interface UsersRepository
 {
     public function findById(int $id): ?User;
     public function findByEmail(string $email): ?User;
-    public function save(User $user): void;
+    public function save(User ...$user): void;
 }

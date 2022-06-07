@@ -6,8 +6,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules;
-use Mirror\Core\Accounts\Contracts\UsersRepository;
 use Mirror\Core\Accounts\Entities\User;
+use Mirror\Core\Accounts\UsersRepository;
 use Mirror\Web\EndPoints\Controller;
 use Mirror\Web\Providers\RouteServiceProvider;
 

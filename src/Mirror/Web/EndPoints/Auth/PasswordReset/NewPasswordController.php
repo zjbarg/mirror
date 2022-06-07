@@ -5,8 +5,8 @@ namespace Mirror\Web\EndPoints\Auth\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rules;
-use Mirror\Core\Accounts\Contracts\UsersRepository;
 use Mirror\Core\Accounts\Entities\User;
+use Mirror\Core\Accounts\UsersRepository;
 use Mirror\Web\EndPoints\Controller;
 
 class NewPasswordController extends Controller

@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature\Auth;
+namespace Tests\Web\Auth;
 
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Mirror\Web\Providers\RouteServiceProvider;
+use Tests\Web\WebTestCase;
 
-class RegistrationTest extends TestCase
+class RegistrationTest extends WebTestCase
 {
     use RefreshDatabase;
 
@@ -27,6 +27,7 @@ class RegistrationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
+
         $response->assertRedirect(RouteServiceProvider::HOME);
     }
 }

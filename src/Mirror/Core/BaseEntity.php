@@ -8,6 +8,8 @@ abstract class BaseEntity
 {
     protected array $domain_events = [];
 
+    abstract public function getKey();
+
     /**
      * Add an event to be dispatched when the entity is persisted
      */

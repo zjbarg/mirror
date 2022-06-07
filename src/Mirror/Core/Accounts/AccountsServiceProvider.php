@@ -9,6 +9,6 @@ class AccountsServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        Event::listen(Events\Registered::class, Listeners\SendWelcomeEmail::class);
+        Event::listen(RegisteredEvent::class, SendWelcomeEmailListener::class);
     }
 }

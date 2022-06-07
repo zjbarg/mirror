@@ -2,15 +2,18 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
+use Mirror\Core\Accounts\Entities\User;
+use Mirror\Core\Accounts\UsersRepository;
+use Tests\Web\WebTestCase;
 
-class PasswordResetTest extends TestCase
+class PasswordResetTest extends WebTestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     public function test_reset_password_link_screen_can_be_rendered()
     {
@@ -23,9 +26,10 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        /** @var User */
+        $user = entity(User::class)->create();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+        $this->post('/forgot-password', ['email' => $user->getEmailAddress()]);
 
         Notification::assertSentTo($user, ResetPassword::class);
     }
@@ -34,9 +38,10 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        /** @var User */
+        $user = entity(User::class)->create();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+        $this->post('/forgot-password', ['email' => $user->getEmailAddress()]);
 
         Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
             $response = $this->get('/reset-password/'.$notification->token);
@@ -51,14 +56,15 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        /** @var User */
+        $user = entity(User::class)->create();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+        $this->post('/forgot-password', ['email' => $user->getEmailAddress()]);
 
         Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
             $response = $this->post('/reset-password', [
                 'token' => $notification->token,
-                'email' => $user->email,
+                'email' => $user->getEmailAddress(),
                 'password' => 'password',
                 'password_confirmation' => 'password',
             ]);

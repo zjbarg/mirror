@@ -2,17 +2,21 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\App;
+use Mirror\Core\Accounts\Entities\User;
+use Mirror\Core\Accounts\UsersRepository;
+use Tests\Web\WebTestCase;
 
-class PasswordConfirmationTest extends TestCase
+class PasswordConfirmationTest extends WebTestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     public function test_confirm_password_screen_can_be_rendered()
     {
-        $user = User::factory()->create();
+        $user = entity(User::class)->create();
 
         $response = $this->actingAs($user)->get('/confirm-password');
 
@@ -21,7 +25,7 @@ class PasswordConfirmationTest extends TestCase
 
     public function test_password_can_be_confirmed()
     {
-        $user = User::factory()->create();
+        $user = entity(User::class)->create();
 
         $response = $this->actingAs($user)->post('/confirm-password', [
             'password' => 'password',
@@ -33,7 +37,7 @@ class PasswordConfirmationTest extends TestCase
 
     public function test_password_is_not_confirmed_with_invalid_password()
     {
-        $user = User::factory()->create();
+        $user = entity(User::class)->create();
 
         $response = $this->actingAs($user)->post('/confirm-password', [
             'password' => 'wrong-password',
